@@ -2,3 +2,18 @@ url: https://smnnlt.github.io/metapp/
 template:
   bootstrap: 5
 
+reference:
+- title: "Calculate Effect Sizes"
+- contents:
+  - md
+  - smd
+  - scr
+- title: "Calculate Confidence Intervals"
+- contents:
+  - get_ci
+- title: "Helpers"
+- contents:
+  - pool_groups
+  - j
+  - r_to_sdd
+  - sdd_to_r
