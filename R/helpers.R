@@ -104,3 +104,40 @@ pool_groups <- function(x1, x2, sd1, sd2, n1, n2) {
     n = n
   )
 }
+
+#' Calculate pooled standard deviation
+#'
+#' Pools the standard deviation of two groups
+#'
+#' @param mle Whether the maximum likelihood estimator should be used, which has
+#'   N instead of df (N-2) in the denominator. See for example McGrath & Mayer
+#'   (2006). Defaults to FALSE.
+#' @inheritParams md
+#' @returns the pooled standard deviation
+#' @examples
+#' sd_pooled(5, 3, 15, 20)
+#'
+#' @export
+sd_pooled <- function(sd1, sd2, n1, n2, mle = FALSE) {
+  if (mle) {
+    den <- n1 + n2
+  } else {
+    den <- n1 + n2 - 2
+  }
+  sqrt(((n1-1)*sd1^2+(n2-1)*sd2^2)/(den))
+}
+
+#' Calculate average standard deviation
+#'
+#' Averages the standard deviations of two groups (square root of average
+#' variance).
+#'
+#' @inheritParams md
+#' @returns the average standard deviation
+#' @examples
+#' sd_avg(5, 3)
+#'
+#' @export
+sd_avg <- function(sd1, sd2) {
+  sqrt((sd1^2+sd2^2)/2)
+}

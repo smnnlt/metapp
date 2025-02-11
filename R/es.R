@@ -17,7 +17,7 @@
 md <- function(x1, x2, sd1, sd2, n1, n2, var_homo = TRUE) {
   md <- x1 - x2
   if (var_homo) { # homogeneous variances: pooled sd
-    s_pooled <- sqrt(((n1-1)*sd1^2+(n2-1)*sd2^2)/(n1+n2-2))
+    sd_pooled <- sd_pooled(sd1, sd2, n1, n2)
     var <- ((n1+n2)/(n1*n2))*(s_pooled^2)
   } else { # heterogeneous variances: average sd
     var <- (sd1^2/n1) + (sd2^2/n2)
@@ -54,9 +54,9 @@ md <- function(x1, x2, sd1, sd2, n1, n2, var_homo = TRUE) {
 smd <- function(x1, x2, sd1, sd2, n1, n2, hedges = TRUE, homo = TRUE, vartype = 1, exact = TRUE) {
   md <- x1 - x2
   if (homo) {
-    s <- sqrt(((n1-1)*sd1^2+(n2-1)*sd2^2)/(n1+n2-2))
+    s <- sd_pooled(sd1, sd2, n1, n2)
   } else {
-    s <- sqrt((sd1^2+sd2^2)/2)
+    s <- sd_avg(sd1, sd2)
   }
   smd <- md/s
   var <- ((n1+n2)/(n1*n2))+(smd^2/(2*n1+2*n2))
@@ -87,8 +87,8 @@ smd <- function(x1, x2, sd1, sd2, n1, n2, hedges = TRUE, homo = TRUE, vartype = 
 #' Calculating a standardized change score difference (raw score based
 #' standardization)
 #'
-#' Calculates a standardized change score group comparison with with a raw score
-#' based standardization (see Morris 2008).
+#' Calculates a standardized change score group comparison for pre-post designs
+#' with a raw score based standardization (see Morris 2008).
 #'
 #' @param x1d,x2d mean changes of the first and second group
 #' @param sd1pre,sd2pre pre-score standard deviations of the first and second
@@ -96,20 +96,21 @@ smd <- function(x1, x2, sd1, sd2, n1, n2, hedges = TRUE, homo = TRUE, vartype = 
 #' @param r1,r2,r pre-post correlation of first and second group (for
 #'   \code{type=1}), or for both groups (for \code{type=2}).
 #' @param type Type of effect size, see Morris (2008). (1) for the difference of
-#'   standardized mean changes of each group, (2) for a standadization using the
-#'   pooled pre sd. Defaults to 2.
-#' @param var_becker For \code{type=1}, whether the variance estimator by Becker
-#'   (1988) should be used (calculating variances for each group and then adding
-#'   them up). Otherwise uses the variance estimation by Morris (2008, Typ
-#'   ppc1). Defaults to FALSE.
+#'   standardized mean changes of each group, (2) for a standardization using
+#'   the pooled pre sd. Defaults to 2.
+#' @param var_becker For \code{type=1}, whether the approximate variance
+#'   estimator by Becker (1988) should be used (calculating variances for each
+#'   group and then adding them up). Otherwise uses the variance estimation by
+#'   Morris (2008, Typ ppc1). See Morris 2000 for a comparison. Defaults to
+#'   FALSE.
 #' @returns A data frame of the class mpp with the effect size (es) and its
 #'   variance (var).
 #' @inheritParams md
 #' @examples
-#' scr(x1d = 5, x2d = 2, sd1pre = 3, sd2pre = 4, n1 = 20, n2 = 24, r = 0.8)
+#' ppc(x1d = 5, x2d = 2, sd1pre = 3, sd2pre = 4, n1 = 20, n2 = 24, r = 0.8)
 #'
 #' @export
-scr <- function(x1d, x2d, sd1pre, sd2pre, n1, n2, r = NA, r1 = NA, r2 = NA, type = 2, var_becker = FALSE) {
+ppc <- function(x1d, x2d, sd1pre, sd2pre, n1, n2, r = NA, r1 = NA, r2 = NA, type = 2, var_becker = FALSE) {
   if (type == 1) {
     g1 <- j(n1-1) * x1d / sd1pre
     g2 <- j(n2-1) * x2d / sd2pre
@@ -122,12 +123,44 @@ scr <- function(x1d, x2d, sd1pre, sd2pre, n1, n2, r = NA, r1 = NA, r2 = NA, type
     }
   } else if (type == 2) {
     df <- n1 + n2 - 2
-    s_pooled <- sqrt(((n1-1)*sd1pre^2+(n2-1)*sd2pre^2)/(df))
+    s_pooled <- sd_pooled(sd1pre, sd2pre, n1, n2)
     g <- j(df)*((x1d-x2d)/s_pooled)
     var <- 2*j(df)^2*(1-r)*((n1+n2)/(n1*n2))*(df/(df-2))*(1+(g^2/(2*(1-r)*((n1+n2)/(n1*n2)))))-g^2
   }
   out <- data.frame(
     es = g,
+    var = var
+  )
+  class(out) <- c("mpp", "data.frame")
+  out
+}
+
+#' Calculating a standardized change score (raw score based standardization)
+#'
+#' Calculates the standardized change score with raw score standardization for a
+#' single group.
+#'
+#' @param xpre,xpost mean of the pre and post score
+#' @param sdpre,sdpost standard deviation of the pre and post score
+#' @param n sample size
+#' @param r pre-post correlation
+#'
+#' @inheritParams smd
+#' @examples
+#' smcr(10, 12, 2, 3, 20, 0.8)
+#'
+#' @export
+smcr <- function(xpre, xpost, sdpre, sdpost, n, r, hedges = TRUE, exact = TRUE) {
+  s_within <- sd_avg(sdpre, sdpost)
+  d <- (xpost - xpre) / s_within
+  var <- 2*(1-r)*((1/n)+(d^2/2*n))
+  if (hedges) {
+    j <- j(n-1, exact = exact)
+    d <- j * d
+    var <- j^2 * var
+  }
+  out <- data.frame(
+    es = d,
     var = var
   )
   class(out) <- c("mpp", "data.frame")

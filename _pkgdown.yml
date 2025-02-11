@@ -7,7 +7,8 @@ reference:
 - contents:
   - md
   - smd
-  - scr
+  - ppc
+  - smcr
 - title: "Calculate Confidence Intervals"
 - contents:
   - get_ci
@@ -15,5 +16,7 @@ reference:
 - contents:
   - pool_groups
   - j
+  - sd_pooled
+  - sd_avg
   - r_to_sdd
   - sdd_to_r
