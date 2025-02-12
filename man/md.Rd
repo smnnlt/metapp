@@ -4,7 +4,7 @@
 \alias{md}
 \title{Calculating a mean difference}
 \usage{
-md(x1, x2, sd1, sd2, n1, n2, var_homo = TRUE)
+md(x1, x2, sd1, sd2, n1, n2, var_homo = FALSE)
 }
 \arguments{
 \item{x1, x2}{means of the first and seconds group.}
@@ -15,7 +15,7 @@ md(x1, x2, sd1, sd2, n1, n2, var_homo = TRUE)
 
 \item{var_homo}{whether an variance estimator with pooled standard deviation
 should be used, that assumes homoscedasticity for the population variance
-(defaults to TRUE).}
+(defaults to FALSE).}
 }
 \value{
 A data frame of the class mpp with the effect size (es) and its

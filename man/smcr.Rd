@@ -26,6 +26,11 @@ correction (otherwise an approximation is used). This is only relevant when
 Calculates the standardized change score with raw score standardization for a
 single group.
 }
+\details{
+Uses the average standard deviations of pre and post scores as the
+standardizer. Uses the variance estimator by Borenstein & Hedges (2019), Eq.
+11.26.
+}
 \examples{
 smcr(10, 12, 2, 3, 20, 0.8)
 

@@ -7,17 +7,17 @@
 #' @param n1,n2 sample sizes of the first and second group.
 #' @param var_homo whether an variance estimator with pooled standard deviation
 #'   should be used, that assumes homoscedasticity for the population variance
-#'   (defaults to TRUE).
+#'   (defaults to FALSE).
 #' @returns A data frame of the class mpp with the effect size (es) and its
 #'   variance (var).
 #' @examples
 #' md(x1 = 10, x2 = 15, sd1 = 3, sd2 = 4, n1 = 11, n2 = 9)
 #'
 #' @export
-md <- function(x1, x2, sd1, sd2, n1, n2, var_homo = TRUE) {
+md <- function(x1, x2, sd1, sd2, n1, n2, var_homo = FALSE) {
   md <- x1 - x2
   if (var_homo) { # homogeneous variances: pooled sd
-    sd_pooled <- sd_pooled(sd1, sd2, n1, n2)
+    s_pooled <- sd_pooled(sd1, sd2, n1, n2)
     var <- ((n1+n2)/(n1*n2))*(s_pooled^2)
   } else { # heterogeneous variances: average sd
     var <- (sd1^2/n1) + (sd2^2/n2)
@@ -140,6 +140,10 @@ ppc <- function(x1d, x2d, sd1pre, sd2pre, n1, n2, r = NA, r1 = NA, r2 = NA, type
 #' Calculates the standardized change score with raw score standardization for a
 #' single group.
 #'
+#' Uses the average standard deviations of pre and post scores as the
+#' standardizer. Uses the variance estimator by Borenstein & Hedges (2019), Eq.
+#' 11.26.
+#'
 #' @param xpre,xpost mean of the pre and post score
 #' @param sdpre,sdpost standard deviation of the pre and post score
 #' @param n sample size
@@ -153,7 +157,7 @@ ppc <- function(x1d, x2d, sd1pre, sd2pre, n1, n2, r = NA, r1 = NA, r2 = NA, type
 smcr <- function(xpre, xpost, sdpre, sdpost, n, r, hedges = TRUE, exact = TRUE) {
   s_within <- sd_avg(sdpre, sdpost)
   d <- (xpost - xpre) / s_within
-  var <- 2*(1-r)*((1/n)+(d^2/2*n))
+  var <- 2*(1-r)*((1/n)+((d^2)/(2*n)))
   if (hedges) {
     j <- j(n-1, exact = exact)
     d <- j * d
