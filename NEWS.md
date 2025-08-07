@@ -1,4 +1,4 @@
-metapp (development version)
+metapp 0.0.3 (2025-08-07)
 ===========================
 * Add new unbiased variance estimator for Hedges' g SMD (`vartype = 4`, default for `meta` package).
 * Fix bug to avoid overflow in exact correction factor calculation for large df
