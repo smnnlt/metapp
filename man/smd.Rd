@@ -31,8 +31,9 @@ Hedges should be applied (defaults to TRUE).}
 (assuming homogeneous population variances). Defaults to TRUE.}
 
 \item{vartype}{whether to use the variance estimator proposed by Hedges (1,
-as is default in metafor), the variance estimator from Borenstein (2), or
-the default in RevMan (3)). Defaults to 1.}
+as is default in metafor), the variance estimator from Borenstein (2), the
+default in RevMan (3), or the unbiased estimator that is the default in
+meta (4). Defaults to 1.}
 
 \item{exact}{whether to use the exact formula for the small sample size
 correction (otherwise an approximation is used). This is only relevant when

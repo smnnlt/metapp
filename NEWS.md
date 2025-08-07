@@ -1,6 +1,7 @@
 metapp (development version)
 ===========================
-
+* Add new unbiased variance estimator for Hedges' g SMD (`vartype = 4`, default for `meta` package).
+* Fix bug in tests
 
 metapp 0.0.2 (2025-02-12)
 ===========================

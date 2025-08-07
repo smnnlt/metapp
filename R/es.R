@@ -39,8 +39,9 @@ md <- function(x1, x2, sd1, sd2, n1, n2, var_homo = FALSE) {
 #' @param homo whether the pooled sd should be used as the standardizer
 #'   (assuming homogeneous population variances). Defaults to TRUE.
 #' @param vartype whether to use the variance estimator proposed by Hedges (1,
-#'   as is default in metafor), the variance estimator from Borenstein (2), or
-#'   the default in RevMan (3)). Defaults to 1.
+#'   as is default in metafor), the variance estimator from Borenstein (2), the
+#'   default in RevMan (3), or the unbiased estimator that is the default in
+#'   meta (4). Defaults to 1.
 #' @param exact whether to use the exact formula for the small sample size
 #'   correction (otherwise an approximation is used). This is only relevant when
 #'   \code{hedges=TRUE}. Defaults to TRUE.
@@ -64,15 +65,18 @@ smd <- function(x1, x2, sd1, sd2, n1, n2, hedges = TRUE, homo = TRUE, vartype = 
     j_res <- j(n1+n2-2, exact = exact)
     smd <- j_res * smd
     if (vartype == 1) {
-      # Hedges 82 plugs g (j*d) into the var estimation
+      # Hedges 82 plugs g (i.e., j*d) into the var estimation
       var <- ((n1+n2)/(n1*n2))+(smd^2/(2*n1+2*n2))
     } else if (vartype == 2) {
-      # Borenstein uses var(d) and then correct by j^2
+      # Borenstein et al. 2019 uses var(d) and then correct by j^2
       var <- j_res^2 * var
     } else if (vartype == 3) {
       # RevMan uses another variant
       var <- ((n1+n2)/(n1*n2))+(smd^2/(2*(n1+n2-3.94)))
-    } else {
+    } else if (vartype == 4) {
+      # use unbiased estimator (meta default)
+      var <- ((n1+n2)/(n1*n2))+smd^2*(1-((n1+n2-4)/((n1+n2-2)*j_res^2)))
+    }else {
       stop("vartype must be one of: 1, 2, 3")
     }
   }

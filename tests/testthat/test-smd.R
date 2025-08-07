@@ -26,3 +26,13 @@ test_that("Hedges' g with different variance estimator matches metafor results",
   expect_equal(hg2$es, as.numeric(hgm2$yi))
   expect_equal(hg2$var, as.numeric(hgm2$vi))
 })
+
+# Hedges' g (vartype 4)
+hgm4 <- escalc(measure = "SMD", vtype = "UB", m1i = 10, m2i = 15, sd1i = 2, sd2i = 3, n1i = 11, n2i = 9)
+hg4 <- smd(10, 15, 2, 3, 11, 9, vartype = 4)
+
+test_that("Hedges' g with unbiased variance estimator matches metafor results", {
+  expect_equal(hg4$es, as.numeric(hgm4$yi))
+  expect_equal(hg4$var, as.numeric(hgm4$vi))
+})
+
