@@ -1,3 +1,7 @@
+metapp (development version)
+===========================
+
+
 metapp 0.0.2 (2025-02-12)
 ===========================
 * New `smcr()` function for standardized change scores with raw score standardization in a single group
