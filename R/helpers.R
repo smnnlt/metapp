@@ -12,7 +12,7 @@
 #' @export
 j <- function(x, exact = TRUE) {
   if (exact) {
-    gamma(x/2) / (sqrt(x/2)*gamma((x-1)/2))
+    exp(lgamma(x/2)-log(sqrt(x/2))-lgamma((x-1)/2))
   } else {
     1 - (3 / (4 * x - 1))
   }
