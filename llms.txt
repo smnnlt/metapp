@@ -1,5 +1,7 @@
 # metapp
 
+[![](https://zenodo.org/badge/DOI/10.5281/zenodo.21913236.svg)](https://doi.org/10.5281/zenodo.21913236)
+
 **NOTE: This package should be used for internal purposes only at the
 moment.**
 
