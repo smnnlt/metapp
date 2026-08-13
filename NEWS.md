@@ -1,3 +1,7 @@
+metapp 0.0.4 (2026-08-13)
+===========================
+* Zenodo release
+
 metapp 0.0.3 (2025-08-07)
 ===========================
 * Add new unbiased variance estimator for Hedges' g SMD (`vartype = 4`, default for `meta` package).
