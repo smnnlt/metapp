@@ -8,7 +8,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/smnnlt/metapp/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/smnnlt/metapp/blob/v0.0.4/DESCRIPTION)
 
 Nolte S (2026). *metapp: Helper Package for Recalculating Effect Sizes
 in Meta-Analyses*. R package version 0.0.4,
